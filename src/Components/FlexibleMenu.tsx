@@ -11,7 +11,7 @@ type Language = {
 interface FlexibleMenuProps {
   menuType?: "context" | "dropdown";
   showCheckbox: boolean;
-  showSearchBar: boolean;
+  showSearchBar?: boolean;
   dropdownPosition?: "above" | "below";
   dropdownAlignment?: "left" | "right";
   contextMenuX?: number;
@@ -20,7 +20,6 @@ interface FlexibleMenuProps {
 const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
   menuType = "dropdown",
   showCheckbox = false,
-  showSearchBar = true,
   dropdownPosition = "below",
   contextMenuX,
   contextMenuY,
