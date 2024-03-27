@@ -1,30 +1,25 @@
-# React + TypeScript + Vite
+# Dropdown Menu Component Documentation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Elevate your application with our highly customizable Dropdown Menu Component. Designed for versatility, our component seamlessly integrates into any project, offering a range of configurations to suit your needs.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Menu Type Selection**: `menuType` allows you to specify the menu as either a traditional dropdown (`"dropdown"`) or a context menu (`"context"`), adapting to various user interactions.
+- **Checkbox Visibility**: With `showCheckbox`, you can toggle the visibility of checkboxes, empowering users with multi-select options. Defaults to `true`.
+- **Searchable Options**: Enhance navigation within extensive lists with `showSearchBar`, a feature we're actively developing to streamline user experience.
+- **Dynamic Dropdown Positioning**: Adjust the vertical positioning (`"above"` or `"below"`) of your dropdown with `dropdownPosition` to ensure it always remains within the viewport.
+- **Custom Alignment**: Utilize `dropdownAlignment` to align the dropdown menu to the left or right, optimizing space and layout aesthetics.
+- **ContextMenu Positioning**: Precisely position your context menu with `contextMenuX` and `contextMenuY`, defining its exact placement on the screen.
 
-## Expanding the ESLint configuration
+## 🎨 Upcoming Feature: Theme Customization
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Get ready to personalize the look and feel of your dropdown menu. Our upcoming theme customization feature will allow you to define a base color, from which we'll dynamically generate a comprehensive color scheme, including:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+```css
+--title-bg-color: #333333;
+--title-bg-color-hover: #4f4f4f;
+--title-bg-color-focus: #4f4f4f;
+--title-text-color: #CBCBCB;
+--dropdown-bg-color: #1F1F1F;
+--dropdown-item-bg-color-hover: #333333;
+--menu-text_color: #E2E2E2;
