@@ -34,6 +34,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
     // if the user clicks on the same item, reset the input value and selected dropdown item
     if (item === selectedDropdownItem) {
       setInputValue("");
+      setFilteredDropdownItems(programmingLanguages);
       setSelectedDropdownItem("");
       setDropdownMenu(false);
       return;
@@ -46,14 +47,6 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
 
   const handleInputFocus = () => {
     setDropdownMenu(true);
-  };
-
-  const handleInputBlur = () => {
-    // reset the dropdown items to the original list when if the user didn't select any item
-    if (selectedDropdownItem === "") {
-      setInputValue("");
-      setFilteredDropdownItems(programmingLanguages);
-    }
   };
 
   const handleUserInput = (enteredItem: string) => {
@@ -91,7 +84,6 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
             placeholder="Choose a language"
             value={inputValue}
             onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
             onChange={(e) => handleUserInput(e.target.value)}
             className="flexible_menu_button_search_text"
             type="text"
