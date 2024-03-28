@@ -1,5 +1,5 @@
 import "./FlexibleMenu.scss";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { programmingLanguages } from "../Utils/Data/dummyData";
 import searchIcon from "../assets/search.svg";
 import { FlexibleMenuProps, Language } from "../Utils/Types/FlexibleMenu";
@@ -19,6 +19,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
     useState<Language[]>(programmingLanguages);
   const [selectedDropdownItem, setSelectedDropdownItem] = useState("");
   const [inputValue, setInputValue] = useState<string>("");
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const selectDropdownItem = (item: string) => {
     // if the user clicks on the same item, reset the input value and selected dropdown item
@@ -48,8 +49,23 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
     setFilteredDropdownItems(filteredItems);
   };
 
+  useEffect(() => {
+
+    const handleMouseDown = (e: MouseEvent) => {
+      if(menuRef.current && !menuRef.current.contains(e.target as Node)){
+          setDropdownMenu(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleMouseDown);
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+    }
+  })
+
   return (
     <div
+    ref={menuRef}
       style={
         menuType === "context"
           ? {
