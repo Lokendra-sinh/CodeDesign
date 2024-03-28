@@ -128,6 +128,10 @@
     border: none;
     cursor: pointer;
 
+    &.focused{
+      background-color: var(--dropdown-item-bg-color-hover);
+    }
+
     &:hover {
       background-color: var(--dropdown-item-bg-color-hover);
     }

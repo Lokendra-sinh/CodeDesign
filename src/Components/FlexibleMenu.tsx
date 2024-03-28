@@ -1,10 +1,8 @@
 import "./FlexibleMenu.scss";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, KeyboardEvent } from "react";
 import { programmingLanguages } from "../Utils/Data/dummyData";
 import searchIcon from "../assets/search.svg";
 import { FlexibleMenuProps, Language } from "../Utils/Types/FlexibleMenu";
-
-
 
 const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
   menuType = "static",
@@ -19,6 +17,8 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
     useState<Language[]>(programmingLanguages);
   const [selectedDropdownItem, setSelectedDropdownItem] = useState("");
   const [inputValue, setInputValue] = useState<string>("");
+
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const selectDropdownItem = (item: string) => {
@@ -29,13 +29,12 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
       setSelectedDropdownItem("");
       setDropdownMenu(false);
       return;
-    } 
+    }
 
     setInputValue(item);
     setSelectedDropdownItem(item);
     setDropdownMenu(false);
   };
-
 
   const handleUserInput = (enteredItem: string) => {
     const filteredItems = programmingLanguages.filter((language) => {
@@ -51,21 +50,65 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
 
   // close the dropdown menu if user clicks outside the menu container
   useEffect(() => {
-
     const handleMouseDown = (e: MouseEvent) => {
-      if(menuRef.current && !menuRef.current.contains(e.target as Node)){
-          setDropdownMenu(false);
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setDropdownMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+    };
+  });
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!dropdownMenu) return;
+    const totalIndex = filteredDropdownItems.length - 1;
+    switch (event.key) {
+      case "ArrowDown":
+        if (focusedIndex === -1 || focusedIndex === totalIndex) {
+          setFocusedIndex(0);
+        } else {
+          setFocusedIndex((prevIndex) => prevIndex + 1);
+        }
+        break;
+
+      case "ArrowUp":
+        if (focusedIndex === -1 || focusedIndex === 0) {
+          setFocusedIndex(totalIndex);
+        } else {
+          setFocusedIndex((prevIndex) => prevIndex - 1);
+        }
+        break;
+
+      case "Enter":
+        if (focusedIndex >= 0) {
+          const item = filteredDropdownItems[focusedIndex];
+          selectDropdownItem(item.name);
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    if (focusedIndex >= 0 && dropdownMenu) {
+      const itemElements = menuRef.current!.querySelectorAll('.dynamic_menu_dropdown_item');
+      if (itemElements[focusedIndex]) {
+        itemElements[focusedIndex].scrollIntoView({
+          behavior: 'smooth', // Smooth scroll
+          block: 'nearest', // Scroll minimal amount, so item gets into view
+          inline: 'start',
+        });
       }
     }
-    document.addEventListener('mousedown', handleMouseDown);
-    return () => {
-      document.removeEventListener('mousedown', handleMouseDown);
-    }
-  })
+  }, [focusedIndex]);
+  
 
   return (
     <div
-    ref={menuRef}
+      ref={menuRef}
       style={
         menuType === "context"
           ? {
@@ -77,8 +120,9 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
           : {}
       }
       className="flexible_menu_container"
+      onKeyDown={handleKeyDown}
     >
-      <div className="flexible_menu_title">
+      <div tabIndex={0} className="flexible_menu_title">
         <div className="flexible_menu_search">
           <div className="search_icon_container">
             {dropdownMenu && <img src={searchIcon} alt="search" />}
@@ -88,9 +132,9 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
             value={inputValue}
             onFocus={() => setDropdownMenu(true)}
             onChange={(e) => handleUserInput(e.target.value)}
-            className={`${showSearchBar ? '' : 'cursor_pointer'}`}
+            className={`${showSearchBar ? "" : "cursor_pointer"}`}
             type="text"
-            readOnly = {!showSearchBar} // to disable the search functionality based on showSearchBar prop's value
+            readOnly={!showSearchBar} // to disable the search functionality based on showSearchBar prop's value
           />
         </div>
 
@@ -137,6 +181,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
 
       {dropdownMenu && (
         <div
+          tabIndex={0}
           className={`dynamic_menu_dropdown ${dropdownPosition}`}
         >
           {filteredDropdownItems.map((language, index) => (
@@ -144,7 +189,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
               key={index}
               className={`dynamic_menu_dropdown_item ${
                 language.name === "No results found!" ? "disabled" : ""
-              }`}
+              } ${focusedIndex === index ? 'focused' : ''}`}
               onMouseDown={(e) => {
                 if (language.name === "No results found!") {
                   e.stopPropagation();
@@ -163,7 +208,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
                 <path
                   d="M3.33334 8L6.66667 11.3333L13.3333 4.66667"
                   stroke={
-                    showCheckbox && (selectedDropdownItem === language.name)
+                    showCheckbox && selectedDropdownItem === language.name
                       ? "#545454"
                       : "transparent"
                   }
