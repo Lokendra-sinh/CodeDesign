@@ -9,6 +9,7 @@ Elevate your application with our highly customizable Dropdown Menu Component. D
 - **Searchable Options**: Enhance navigation within extensive lists with `showSearchBar`.
 - **Dynamic Dropdown Positioning**: Adjust the vertical positioning (`"above"` or `"below"`) of your dropdown with `dropdownPosition` to ensure it always remains within the viewport.
 - **ContextMenu Positioning**: Precisely position your context menu with `contextMenuX` and `contextMenuY`, defining its exact placement on the screen.
+- **Search on/off**: Allowing users to toggle the search functionality.
 
 ## 🎨 Feature I want to work on:
 
@@ -24,5 +25,4 @@ A theme customization feature that allow you to define a base color, from which 
 --menu-text_color: #E2E2E2;
 
 ## Currently working on:
-- **Custom Alignment**: Utilize `dropdownAlignment` to align the dropdown menu to the left or right, optimizing space and layout aesthetics.
-- **Search on/off**: Allowing users to toggle the search functionality.
+- **Keyboard Navigation**: allows users to interact with a dropdown menu using only the `keyboard`, without relying on a mouse or other pointing devices

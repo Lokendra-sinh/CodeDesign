@@ -29,7 +29,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
       setSelectedDropdownItem("");
       setDropdownMenu(false);
       return;
-    }
+    } 
 
     setInputValue(item);
     setSelectedDropdownItem(item);
@@ -49,6 +49,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
     setFilteredDropdownItems(filteredItems);
   };
 
+  // close the dropdown menu if user clicks outside the menu container
   useEffect(() => {
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -56,7 +57,6 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
           setDropdownMenu(false);
       }
     }
-
     document.addEventListener('mousedown', handleMouseDown);
     return () => {
       document.removeEventListener('mousedown', handleMouseDown);
