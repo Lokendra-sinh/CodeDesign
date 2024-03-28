@@ -2,24 +2,14 @@ import "./FlexibleMenu.scss";
 import { useState } from "react";
 import { programmingLanguages } from "../Utils/Data/dummyData";
 import searchIcon from "../assets/search.svg";
+import { FlexibleMenuProps, Language } from "../Utils/Types/FlexibleMenu";
 
-type Language = {
-  name: string;
-  icon?: string;
-};
 
-interface FlexibleMenuProps {
-  menuType?: "context" | "dropdown";
-  showCheckbox: boolean;
-  showSearchBar?: boolean;
-  dropdownPosition?: "above" | "below";
-  dropdownAlignment?: "left" | "right";
-  contextMenuX?: number;
-  contextMenuY?: number;
-}
+
 const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
-  menuType = "dropdown",
-  showCheckbox = false,
+  menuType = "static",
+  showCheckbox = true,
+  showSearchBar = true,
   dropdownPosition = "below",
   contextMenuX,
   contextMenuY,
@@ -30,7 +20,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
   const [selectedDropdownItem, setSelectedDropdownItem] = useState("");
   const [inputValue, setInputValue] = useState<string>("");
 
-  const toggleDropdownItemSelection = (item: string) => {
+  const selectDropdownItem = (item: string) => {
     // if the user clicks on the same item, reset the input value and selected dropdown item
     if (item === selectedDropdownItem) {
       setInputValue("");
@@ -45,9 +35,6 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
     setDropdownMenu(false);
   };
 
-  const handleInputFocus = () => {
-    setDropdownMenu(true);
-  };
 
   const handleUserInput = (enteredItem: string) => {
     const filteredItems = programmingLanguages.filter((language) => {
@@ -76,17 +63,18 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
       className="flexible_menu_container"
     >
       <div className="flexible_menu_title">
-        <div className="flexible_menu_button_search">
+        <div className="flexible_menu_search">
           <div className="search_icon_container">
             {dropdownMenu && <img src={searchIcon} alt="search" />}
           </div>
           <input
             placeholder="Choose a language"
             value={inputValue}
-            onFocus={handleInputFocus}
+            onFocus={() => setDropdownMenu(true)}
             onChange={(e) => handleUserInput(e.target.value)}
-            className="flexible_menu_button_search_text"
+            className={`${showSearchBar ? '' : 'cursor_pointer'}`}
             type="text"
+            readOnly = {!showSearchBar} // to disable the search functionality based on showSearchBar prop's value
           />
         </div>
 
@@ -146,7 +134,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
                   e.stopPropagation();
                   return; // Early return to prevent any further action
                 }
-                toggleDropdownItemSelection(language.name);
+                selectDropdownItem(language.name);
               }}
             >
               <svg
@@ -159,7 +147,7 @@ const FlexibleMenu: React.FC<FlexibleMenuProps> = ({
                 <path
                   d="M3.33334 8L6.66667 11.3333L13.3333 4.66667"
                   stroke={
-                    showCheckbox && selectedDropdownItem === language.name
+                    showCheckbox && (selectedDropdownItem === language.name)
                       ? "#545454"
                       : "transparent"
                   }
